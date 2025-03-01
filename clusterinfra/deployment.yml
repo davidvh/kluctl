@@ -1,0 +1,9 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: metallb
+  - path: cert-manager
+  - barrier: true
+
+commonLabels:
+  examples.kluctl.io/deployment-project: "clusterinfra"

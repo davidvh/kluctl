@@ -1,0 +1,5 @@
+# See https://metallb.universe.tf/installation/
+namespace: metallb-system
+
+resources:
+  - github.com/metallb/metallb/config/native?ref=v0.14.9
