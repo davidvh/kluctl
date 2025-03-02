@@ -1,4 +1,4 @@
 targets:
   - name: local
     context: Default
-    discriminator: "homelab-{{ target.name }}"
+discriminator: "infra-{{ target.name }}"
