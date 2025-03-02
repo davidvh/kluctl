@@ -1,3 +1,4 @@
 targets:
   - name: local
-    context: default
+    context: Default
+    discriminator: "homelab-{{ target.name }}"
