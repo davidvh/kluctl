@@ -1,7 +1,7 @@
 helmChart:
   repo: https://metallb.github.io/metallb
   chartName: metallb
-  chartVersion: "v0.14.9"
+  chartVersion: "0.14.9"
   releaseName: metallb
   namespace: metallb
   output: deploy.yml
