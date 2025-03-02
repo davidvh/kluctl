@@ -3,5 +3,5 @@ helmChart:
   chartName: metallb
   chartVersion: "0.14.9"
   releaseName: metallb
-  namespace: metallb
+  namespace: metallb-system
   output: deploy.yml
