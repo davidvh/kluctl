@@ -1,10 +1,11 @@
 deployments:
   - path: namespace
   - barrier: true
+  - include: kluctl
   - path: metallb
   - path: cert-manager
-  - include: kluctl
   - barrier: true
+  - path: gitops
 
 commonLabels:
   examples.kluctl.io/deployment-project: "clusterinfra"

@@ -1,7 +1,7 @@
 apiVersion: gitops.kluctl.io/v1beta1
 kind: KluctlDeployment
 metadata:
-  name: deploy-home
+  name: clusterinfra
   namespace: kluctl-system
 spec:
   interval: 5m
@@ -11,5 +11,5 @@ spec:
       path: clusterinfra
   target: local
   args:
-    iprange: 192.168.10.0/24
+    iprange: {{ args.iprange }}
   context: Default

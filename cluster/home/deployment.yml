@@ -1,4 +1,0 @@
-deployments:
-  - include: kluctl
-  - barrier: true
-  - path: gitops
