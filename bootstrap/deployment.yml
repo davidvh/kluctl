@@ -1,0 +1,4 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: config

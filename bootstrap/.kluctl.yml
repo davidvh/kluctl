@@ -1,0 +1,8 @@
+args:
+  - name: iprange
+
+targets:
+  - name: local
+    context: Default
+
+discriminator: "define-{{ target.name }}"
