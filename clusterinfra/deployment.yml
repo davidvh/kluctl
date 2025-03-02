@@ -3,6 +3,7 @@ deployments:
   - barrier: true
   - path: metallb
   - path: cert-manager
+  - include: kluctl
   - barrier: true
 
 commonLabels:
