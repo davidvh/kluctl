@@ -9,6 +9,8 @@ spec:
     git:
       url: https://github.com/davidvh/kluctl.git
       path: clusterinfra
+      ref:
+        branch: initial # TODO: Change this to main
   target: local
   args:
     iprange: {{ args.iprange }}
