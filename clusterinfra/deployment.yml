@@ -5,7 +5,7 @@ deployments:
   - path: metallb
   - path: cert-manager
   - barrier: true
-  - path: gitops
+  #- path: gitops # TODO: figure out why this gets blocked
 
 commonLabels:
   examples.kluctl.io/deployment-project: "clusterinfra"
