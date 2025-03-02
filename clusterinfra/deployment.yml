@@ -15,3 +15,6 @@ conflictResolution:
     namespace: metallb-system
     fieldPath: webhooks.*.*
     action: ignore
+  - kind: CustomResourceDefinition
+    fieldPathRegex: ".*\\.caBundle.*"
+    action: ignore
