@@ -16,13 +16,11 @@ deployments:
   - barrier: true
   - path: cert-issuer
     vars:
-      - clusterSecret:
+      - clusterObject:
+          kind: Secret
           name: cloudflare
           namespace: homelab-config
-        targetPath: cloudflare
-      - clusterSecret:
-          name: cloudflare
-          namespace: homelab-config
+          path: data
         targetPath: cloudflare
   - path: ingress-nginx
     vars:
