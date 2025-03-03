@@ -32,8 +32,9 @@ spec:
           volumeMounts:
             - name: config
               mountPath: /etc/inadyn.conf
+              subPath: inadyn.conf
               readOnly: true
       volumes:
         - name: config
           secret:
-            secretName: "inadyn.conf"
+            secretName: config
