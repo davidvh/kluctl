@@ -4,14 +4,14 @@ metadata:
   name: cloudflare-issuer
 spec:
   acme:
-    email: {{ cloudflare.email }}
+    email: {{ cloudflare.email | b64decode }}
     server: https://acme-v02.api.letsencrypt.org/directory
     privateKeySecretRef:
       name: cluster-issuer-account-key
     solvers:
     - dns01:
         cloudflare:
-          email: {{ cloudflare.email | base64decode }}
+          email: {{ cloudflare.email | b64decode }}
           apiTokenSecretRef:
             name: cloudflare-api-token
             key: api-token

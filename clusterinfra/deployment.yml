@@ -42,10 +42,6 @@ commonLabels:
   examples.kluctl.io/deployment-project: "clusterinfra"
 
 conflictResolution:
-  - kind: ValidatingWebhookConfiguration
-    namespace: metallb-system
-    fieldPath: webhooks.*.*
-    action: ignore
   - kind: CustomResourceDefinition
     fieldPathRegex: ".*\\.caBundle.*"
     action: ignore
