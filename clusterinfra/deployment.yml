@@ -9,9 +9,9 @@ deployments:
   - path: metallb-config
     vars:
       - clusterConfigMap:
-        name: lbconfig
-        namespace: homelab-config
-        key: vars
+          name: lbconfig
+          namespace: homelab-config
+          key: vars
 
 commonLabels:
   examples.kluctl.io/deployment-project: "clusterinfra"
