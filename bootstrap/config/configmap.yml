@@ -6,3 +6,4 @@ metadata:
 data:
   vars: |
     iprange: {{ args.iprange }}
+    clusterip: {{ args.clusterip }}

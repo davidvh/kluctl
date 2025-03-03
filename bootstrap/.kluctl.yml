@@ -1,5 +1,6 @@
 args:
   - name: iprange
+  - name: clusterip
 
 targets:
   - name: local

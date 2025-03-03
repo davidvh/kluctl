@@ -1,0 +1,8 @@
+controller:
+  ingressClassResource:
+    default: "true"
+  allowSnippetAnnotations: "true"
+  service:
+    loadBalancerIP: {{ clusterip }}
+    annotations:
+      "metallb.universe.tf/allow-shared-ip": "cluster"

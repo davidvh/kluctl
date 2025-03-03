@@ -12,6 +12,13 @@ deployments:
           name: lbconfig
           namespace: homelab-config
           key: vars
+  - barrier: true
+  - path: ingress-nginx
+    vars:
+      - clusterConfigMap:
+          name: lbconfig
+          namespace: homelab-config
+          key: vars
 
 commonLabels:
   examples.kluctl.io/deployment-project: "clusterinfra"
