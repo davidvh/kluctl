@@ -6,12 +6,16 @@ metadata:
   labels:
     app.kubernetes.io/name: homepage
   annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
     gethomepage.dev/description: Dynamically Detected Homepage
     gethomepage.dev/enabled: "true"
     gethomepage.dev/group: Cluster Management
     gethomepage.dev/icon: homepage.png
     gethomepage.dev/name: Homepage
 spec:
+  tls:
+    - hosts:
+        - "homepage.{{ ingress.domain }}"
   rules:
     - host: "homepage.{{ ingress.domain }}"
       http:
