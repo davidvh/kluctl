@@ -3,6 +3,6 @@ controller:
     default: "true"
   allowSnippetAnnotations: "true"
   service:
-    loadBalancerIP: {{ clusterip }}
+    loadBalancerIP: {{ lbconfig.clusterip }}
     annotations:
       "metallb.universe.tf/allow-shared-ip": "cluster"

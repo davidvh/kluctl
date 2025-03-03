@@ -12,13 +12,27 @@ deployments:
           name: lbconfig
           namespace: homelab-config
           key: vars
+        targetPath: lbconfig
   - barrier: true
+  - path: cert-issuer
+    vars:
+      - clusterSecret:
+          name: cloudflare
+          namespace: homelab-config
+          key: email
+        targetPath: cloudflare.email
+      - clusterSecret:
+          name: cloudflare
+          namespace: homelab-config
+          key: api-token
+        targetPath: cloudflare.api-token
   - path: ingress-nginx
     vars:
       - clusterConfigMap:
           name: lbconfig
           namespace: homelab-config
           key: vars
+        targetPath: lbconfig
 
 commonLabels:
   examples.kluctl.io/deployment-project: "clusterinfra"

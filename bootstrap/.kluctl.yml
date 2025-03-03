@@ -1,6 +1,8 @@
 args:
   - name: iprange
   - name: clusterip
+  - name: cloudflareemail
+  - name: cloudflareapitoken
 
 targets:
   - name: local
