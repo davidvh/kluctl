@@ -19,13 +19,11 @@ deployments:
       - clusterSecret:
           name: cloudflare
           namespace: homelab-config
-          key: email
-        targetPath: cloudflare.email
+        targetPath: cloudflare
       - clusterSecret:
           name: cloudflare
           namespace: homelab-config
-          key: api-token
-        targetPath: cloudflare.api-token
+        targetPath: cloudflare
   - path: ingress-nginx
     vars:
       - clusterConfigMap:
