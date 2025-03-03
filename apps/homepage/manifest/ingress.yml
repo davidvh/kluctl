@@ -16,6 +16,7 @@ spec:
   tls:
     - hosts:
         - "homepage.{{ ingress.domain }}"
+      secretName: cert-tls
   rules:
     - host: "homepage.{{ ingress.domain }}"
       http:
