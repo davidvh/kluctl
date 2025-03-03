@@ -1,0 +1,8 @@
+deployments:
+  - path: manifest
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress

@@ -1,0 +1,5 @@
+targets:
+  - name: local
+    context: Default
+
+discriminator: "app-homepage-{{ target.name }}"
