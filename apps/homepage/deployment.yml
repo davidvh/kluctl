@@ -1,4 +1,6 @@
 deployments:
+  - path: namespace
+  - barrier: true
   - path: manifest
     vars:
       - clusterConfigMap:
