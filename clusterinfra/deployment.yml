@@ -28,6 +28,7 @@ deployments:
           kind: Secret
           name: cloudflare
           namespace: homelab-config
+          path: data
         targetPath: cloudflare
   - path: ingress-nginx
     vars:
