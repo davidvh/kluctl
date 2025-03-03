@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: inadyn
+  namespace: inadyn
+spec:
+  selector:
+    matchLabels:
+      app: inadyn
+  template:
+    metadata:
+      labels:
+        app: inadyn
+    spec:
+      containers:
+        - name: inadyn
+          # See https://hub.docker.com/r/troglobit/inadyn/tags
+          image: "troglobit/inadyn:v2.12.0"
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            exec:
+              command:
+              - inadyn
+              - --check-config
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/inadyn.conf
+              readOnly: true
+      volumes:
+        - name: config
+          secret:
+            secretName: "inadyn.conf"
