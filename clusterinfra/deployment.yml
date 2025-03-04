@@ -4,6 +4,7 @@ deployments:
   - include: kluctl
   - path: metallb
   - path: cert-manager
+  - path: openebs
   - barrier: true
   #- path: gitops # TODO: figure out why this gets blocked
   - path: metallb-config
@@ -22,6 +23,7 @@ deployments:
           namespace: homelab-config
           path: data
         targetPath: cloudflare
+  - path: openebs-config
   - path: inadyn
     vars:
       - clusterObject:

@@ -5,12 +5,13 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 ## Setup
 
 1. Setup a linux server. e.g. Using [Alpine Linux with ZFS root](https://github.com/psy0rz/alpinebox).
-2. Setup a k0s cluster. k3s also possible, if load balancer and traefik are disabled so that they can be managed by this config.
-3. Install Kluctl
-4. Create a new YAML file defining the arguments described in /bootstrap/.kluctl.yml
-5. `cd` into the bootstrap folder and execute `kluctl deploy -t local --args-from-file <YAML file>`
-6. `cd` into the clusterinfra folder and execute `kluctl deploy -t local`
-7. TODO: Install applications
+2. Create a new ZFS dataset for OpenEBS zfs-local CSI to use for volumes. e.g. `zfs create rpool/openebs`
+3. Setup a k0s cluster. k3s also possible, if load balancer and traefik are disabled so that they can be managed by this config.
+4. Install Kluctl
+5. Create a new YAML file defining the arguments described in /bootstrap/.kluctl.yml
+6. `cd` into the bootstrap folder and execute `kluctl deploy -t local --args-from-file <YAML file>`
+7. `cd` into the clusterinfra folder and execute `kluctl deploy -t local`
+8. TODO: Install applications
 
 ### TODO
 
