@@ -1,9 +1,0 @@
-driver: zfs-local-dataset
-
-zfs:
-  datasetParentName: rpool/openebs/v
-  detachedSnapshotsDatasetParentName: rpool/openebs/s
-  datasetEnableQuotas: true
-  datasetEnableReservation: false
-node:
-  kubeletHostPath: /var/lib/k0s/kubelet

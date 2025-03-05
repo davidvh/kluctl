@@ -1,7 +1,0 @@
-helmChart:
-  repo: https://democratic-csi.github.io/charts/
-  chartName: democratic-csi
-  chartVersion: "0.14.7"
-  releaseName: democratic-csi
-  namespace: democratic-csi
-  output: deploy.yml

@@ -1,0 +1,7 @@
+helmChart:
+  repo: https://openebs.github.io/openebs
+  chartName: openebs
+  chartVersion: "4.2.0"
+  releaseName: openebs
+  namespace: openebs
+  output: deploy.yml

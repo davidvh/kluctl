@@ -1,0 +1,10 @@
+engines:
+  local:
+    lvm:
+      enabled: false
+  replicated:
+    mayastor:
+      enabled: false
+zfs-localpv:
+  zfsNode:
+    kubeletDir: /var/lib/k0s/kubelet
