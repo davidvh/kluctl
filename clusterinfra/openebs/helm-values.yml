@@ -1,10 +1,17 @@
+zfs-localpv:
+  zfsNode:
+    kubeletDir: /var/lib/k0s/kubelet
+  crds:
+    csi:
+      volumeSnapshots:
+        enabled: true
+
 engines:
   local:
     lvm:
       enabled: false
+    zfs:
+      enabled: true
   replicated:
     mayastor:
       enabled: false
-zfs-localpv:
-  zfsNode:
-    kubeletDir: /var/lib/k0s/kubelet
