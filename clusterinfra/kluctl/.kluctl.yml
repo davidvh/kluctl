@@ -1,4 +1,4 @@
 targets:
   - name: local
-    context: Default
+    context: default
 discriminator: "kluctl-{{ target.name }}"

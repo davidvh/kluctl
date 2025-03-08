@@ -4,8 +4,8 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 
 ## Setup
 
-1. Setup a linux server. e.g. Using [Alpine Linux with ZFS root](https://github.com/psy0rz/alpinebox).
-2. Create a new ZFS dataset for OpenEBS zfs-local CSI to use for volumes. e.g. `zfs create rpool/openebs`
+1. Setup a linux server, not using a ZFS root. e.g. by installing DietPI to a usb drive and mounting a ZFS drive to /var/lib/rancher (`zfs set mountpoint=/var/lib/rancher rpool/rancher`)
+2. Create a new ZFS dataset for OpenEBS zfs-local CSI to use for volumes. e.g. `zfs create rpool/openebs` and `zfs set mountpoint=none rpool/openebs`
 3. Setup a k0s cluster. k3s also possible, if load balancer and traefik are disabled so that they can be managed by this config.
 4. Install Kluctl
 5. Create a new YAML file defining the arguments described in /bootstrap/.kluctl.yml

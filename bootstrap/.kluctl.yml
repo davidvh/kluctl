@@ -6,6 +6,6 @@ args:
 
 targets:
   - name: local
-    context: Default
+    context: default
 
 discriminator: "define-{{ target.name }}"
