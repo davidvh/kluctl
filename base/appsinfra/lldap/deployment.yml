@@ -39,7 +39,7 @@ spec:
             - name: LLDAP_LDAP_USER_PASS
               valueFrom:
                 secretKeyRef:
-                  name: lldap-initial-password
+                  name: lldap-admin
                   key: password
             - name: TZ
               value: UTC
