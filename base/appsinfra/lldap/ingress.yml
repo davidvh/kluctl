@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: lldap-service
+  namespace: lldap
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/name: "LLDAP"
+    gethomepage.dev/description: "User management"
+    gethomepage.dev/group: "Backend"
+    gethomepage.dev/icon: "mdi-account-group"
+spec:
+  tls:
+    - hosts:
+        - "lldap.{{ ingress.domain }}"
+      secretName: cert-tls
+  rules:
+    - host: "lldap.{{ ingress.domain }}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: lldap-service
+                port:
+                  name: web

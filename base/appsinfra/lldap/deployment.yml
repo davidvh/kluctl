@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    lldap: https://github.com/nitnelave/lldap
+    k8s: https://github.com/Evantage-WS/lldap-kubernetes
+  labels:
+    app: lldap
+  name: lldap
+  namespace: lldap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: lldap
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        lldap: https://github.com/nitnelave/lldap
+        k8s: https://github.com/Evantage-WS/lldap-kubernetes
+      labels:
+        app: lldap
+    spec:
+      containers:
+        - env:
+            - name: UID
+              value: "1001"
+            - name: GID
+              value: "1001"
+            - name: LLDAP_LDAP_BASE_DN
+              value: {{ ldap.dn }}
+            - name: LLDAP_JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-jwt
+                  key: jwt-secret
+            - name: LLDAP_LDAP_USER_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-initial-password
+                  key: password
+            - name: TZ
+              value: UTC
+          image: nitnelave/lldap:2024-04-01-alpine
+          name: lldap
+          ports:
+            - containerPort: 3890
+            - containerPort: 17170
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          volumeMounts:
+            - mountPath: /data
+              name: lldap-data
+      restartPolicy: Always
+      volumes:
+        - name: lldap-data
+          persistentVolumeClaim:
+            claimName: lldap-data

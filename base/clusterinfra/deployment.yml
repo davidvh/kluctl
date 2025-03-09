@@ -2,12 +2,13 @@ deployments:
   - path: namespace
   - barrier: true
   - include: kluctl
+  - path: secrets-generator
   - path: metallb
   - path: cert-manager
   - path: openebs
   - barrier: true
   #- path: gitops # TODO: figure out why this gets blocked
-  - path: metallb-config
+  - path: metallb-config # TODO: figure out webhook to wait until metallb is ready
     vars:
       - clusterConfigMap:
           name: lbconfig

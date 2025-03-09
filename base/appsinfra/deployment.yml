@@ -1,0 +1,15 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: lldap
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress
+      - clusterConfigMap:
+          name: ldap
+          namespace: homelab-config
+          key: vars
+        targetPath: ldap

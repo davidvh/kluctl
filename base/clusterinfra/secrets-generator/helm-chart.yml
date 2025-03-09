@@ -1,0 +1,7 @@
+helmChart:
+  repo: https://helm.mittwald.de
+  chartName: kubernetes-secret-generator
+  chartVersion: "3.4.1"
+  releaseName: kubernetes-secret-generator
+  namespace: secret-generator
+  output: deploy.yml

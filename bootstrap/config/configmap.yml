@@ -17,3 +17,12 @@ metadata:
 data:
   vars: |
     domain: {{ args.cloudflaredomain }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ldap
+  namespace: homelab-config
+data:
+  vars: |
+    dn: {{ args.ldapdn }}

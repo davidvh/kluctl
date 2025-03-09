@@ -3,6 +3,7 @@ args:
   - name: clusterip
   - name: cloudflareemail
   - name: cloudflareapitoken
+  - name: ldapdn
 
 targets:
   - name: local
