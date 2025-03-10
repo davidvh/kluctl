@@ -29,3 +29,15 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
   Creates ConfigMaps and Secrets in the `homelab-config` namespace. Kluctl can refer to these configurations to deploy other resources. This is as an alternative to storing configs and secrets in the code repo directly (e.g. SOPs, etc).
 - /clusterinfra   
   This defines steps to set up the minimal cluster, including load balancing, ingress, certificates, etc.
+
+## Base Services
+
+- `homepage.<domain>` - Automatically includes browser pages for your services, plus some basic monitoring of the cluster
+- `lldap.<domain>` - LDAP accounts. The admin account is randomly generated in the lldap-admin secret. Use this account to do the initial login and create user accounts to authenticate with other services.
+- `mail.<domain>` - a local-only email server for `<username>@mail.<domain>`. Services will use this to send notifications. Computers/phones can be configured to connect to this endpoint for SMTP and IMAP.
+
+### TODO
+
+- LLDAP supports scripting the creation of new accounts. It should be possible for services to automatically create their own LDAP accounts with the appropriate groups for admin and email access.
+- Maddy.email requires manual rebooting until it has successufully created the certificate. A good health check would probably automate this process.
+- Should be possible to host a webmail frontend.

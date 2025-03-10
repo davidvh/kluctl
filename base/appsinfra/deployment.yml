@@ -13,3 +13,33 @@ deployments:
           namespace: homelab-config
           key: vars
         targetPath: ldap
+  - barrier: true
+  - path: mailserver
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress
+      - clusterConfigMap:
+          name: lbconfig
+          namespace: homelab-config
+          key: vars
+        targetPath: lbconfig
+      - clusterConfigMap:
+          name: ldap
+          namespace: homelab-config
+          key: vars
+        targetPath: ldap
+      - clusterObject:
+          kind: Secret
+          name: lldap-admin
+          namespace: lldap
+          path: data
+        targetPath: lldap_admin
+      - clusterObject:
+          kind: Secret
+          name: cloudflare
+          namespace: homelab-config
+          path: data
+        targetPath: cloudflare
