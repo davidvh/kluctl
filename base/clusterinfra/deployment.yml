@@ -24,6 +24,12 @@ deployments:
           namespace: homelab-config
           path: data
         targetPath: cloudflare
+      - clusterObject:
+          kind: Secret
+          name: zerossl
+          namespace: homelab-config
+          path: data
+        targetPath: zerossl
   - path: openebs-config
   - path: inadyn
     vars:

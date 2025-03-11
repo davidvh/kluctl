@@ -4,6 +4,8 @@ args:
   - name: cloudflareemail
   - name: cloudflareapitoken
   - name: ldapdn
+  - name: zerossleab
+  - name: zerosslhmac
 
 targets:
   - name: local
