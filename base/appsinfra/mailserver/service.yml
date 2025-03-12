@@ -4,8 +4,6 @@ kind: Service
 metadata:
   name: mailserver
   namespace: mailserver
-  labels:
-    app: mailserver
   annotations:
     "metallb.universe.tf/allow-shared-ip": "cluster"
 spec:
@@ -22,15 +20,15 @@ spec:
     protocol: TCP
     port: 143
     targetPort: 143
-  - name: smtps
+  - name: imaps
     protocol: TCP
     port: 465
     targetPort: 465
-  - name: imaps
-    protocol: TCP
-    port: 993
-    targetPort: 993
   - name: submission
     protocol: TCP
     port: 587
     targetPort: 587
+  - name: submissions
+    protocol: TCP
+    port: 993
+    targetPort: 993
