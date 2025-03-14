@@ -1,0 +1,97 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: lldap-group-configs
+  namespace: lldap
+  labels:
+    app: lldap
+data:
+  media.json: |
+    {
+      "name" : "media"
+    }
+---
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name:  lldap-user-configs
+  namespace: lldap
+  labels:
+    app: lldap
+stringData:
+  ldap_reader.json: |
+    {
+      "id": "{{ lldap_reader.username | b64decode }}",
+      "email": "{{ lldap_reader.username | b64decode }}@{{ ingress.domain }}",
+      "password": "{{ lldap_reader.password | b64decode }}",
+      "displayName": "LLDAP Reader",
+      "groups": [
+        "lldap_strict_readonly"
+      ]
+    }
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: lldap-bootstrap
+  namespace: lldap
+  # This annotation is used to trigger the job after the deployment
+  annotations: 
+    klcltl.io/hook: "post-deploy"
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: lldap-bootstrap
+          image: nitnelave/lldap:2024-04-01-alpine
+
+          command:
+            - /app/bootstrap.sh
+
+          env:
+            - name: LLDAP_URL
+              value: "http://lldap.lldap"
+            - name: LLDAP_ADMIN_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-admin
+                  key: username
+            - name: LLDAP_ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: lldap-admin
+                  key: password
+
+            - name: DO_CLEANUP
+              value: "false"
+
+          volumeMounts:
+            - name: user-configs
+              mountPath: /user-configs
+              readOnly: true
+            - name: group-configs
+              mountPath: /group-configs
+              readOnly: true
+
+      volumes:
+        - name: user-configs
+          projected:
+            sources:
+              - secret:
+                  name: lldap-user-configs
+                  items:
+                    - key: ldap_reader.json
+                      path: ldap_reader.json
+
+        - name: group-configs
+          projected:
+            sources:
+              - configMap:
+                  name: lldap-group-configs
+                  items:
+                    - key: media.json
+                      path: media.json
+              

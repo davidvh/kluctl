@@ -38,6 +38,8 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 
 ### TODO
 
-- LLDAP supports scripting the creation of new accounts. It should be possible for services to automatically create their own LDAP accounts with the appropriate groups for admin and email access.
-- Maddy.email requires manual rebooting until it has successufully created the certificate. A good health check would probably automate this process.
+- LLDAP bootstrap script can create users, but a single kluctl deployment cannot create a secret and then consume it in the next step, so the initial deployment requires a bit of hacking to slowly deploy via multiple commands. There are some options:
+  - Use external tooling to invoke the deployment multiple times (e.g. a Makefile)
+  - Use the [Template Controller](https://kluctl.io/docs/template-controller/) to avoid using secrets directly (although this may be difficult to cross namespaces).
+  - Define the secrets during bootstrap (but might not scale to other secrets)
 - Should be possible to host a webmail frontend.

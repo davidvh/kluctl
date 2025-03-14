@@ -47,7 +47,9 @@ spec:
           name: lldap
           ports:
             - containerPort: 3890
+              name: ldap
             - containerPort: 17170
+              name: web
           resources:
             limits:
               memory: "512Mi"
