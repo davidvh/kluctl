@@ -33,10 +33,10 @@ deployments:
         targetPath: ldap
       - clusterObject:
           kind: Secret
-          name: lldap-admin
+          name: lldap-reader
           namespace: lldap
           path: data
-        targetPath: lldap_admin
+        targetPath: lldap_user
       - clusterObject:
           kind: Secret
           name: cloudflare

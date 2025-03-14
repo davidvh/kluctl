@@ -103,9 +103,12 @@ spec:
         - name: LDAP_SEARCH_BASE
           value: "ou=people,{{ ldap.dn }}"
         - name: LDAP_BIND_DN
-          value: "uid={{ lldap_admin.username | b64decode }},ou=people,{{ ldap.dn }}"
+          value: "uid={{ lldap_user.username | b64decode }},ou=people,{{ ldap.dn }}"
         - name: LDAP_BIND_PW
-          value: "{{ lldap_admin.password | b64decode }}"
+          valueFrom:
+            secretKeyRef:
+              name: lldap-user
+              key: password
         - name: LDAP_QUERY_FILTER_USER
           value: "(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))"
         - name: LDAP_QUERY_FILTER_GROUP
