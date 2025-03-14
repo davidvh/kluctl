@@ -1,4 +1,0 @@
-deployments:
-  - include: clusterinfra
-  - barrier: true
-  - include: appsinfra

@@ -1,5 +1,0 @@
-targets:
-  - name: local
-    context: default
-
-discriminator: "base-{{ target.name }}"

@@ -1,0 +1,97 @@
+[CmdletBinding(DefaultParameterSetName = 'Deploy')]
+param (
+    [switch] $NoPrune,
+
+    [Parameter(ParameterSetName = 'Bootstrap')]
+    [string] $BootstrapFile,
+
+    [Parameter(ParameterSetName = 'Deploy')]
+    [ArgumentCompleter({
+            param($commandName, $parameterName, $wordToComplete, $commandAst, $fakeBoundParameter)
+            $targets = Get-ChildItem -Path $PSScriptRoot -Recurse -Include @(".kluctl.yml", 'deploy.seq') |
+                ForEach-Object { $_.Directory.FullName.Substring($PSScriptRoot.Length + 1) } |
+                Select-Object -Unique
+            $targets = $targets | Where-Object { $_ -ine 'bootstrap' }
+            
+            return $targets | Where-Object { $_ -like "*$wordToComplete*" }
+        })]
+    [string[]] $Targets
+)
+
+$ErrorActionPreference = 'Stop'
+
+if ($PSCmdlet.ParameterSetName -ieq 'Bootstrap') {
+    $BootstrapFile = Resolve-Path -Path $BootstrapFile
+    if (-not (Test-Path -Path $BootstrapFile)) {
+        Write-Error "Bootstrap file not found: $BootstrapFile"
+        return
+    }
+
+    Push-Location -Path (Join-Path $PSScriptRoot "bootstrap")
+    & kluctl deploy -t local --args-from-file $BootstrapFile
+    Pop-Location
+}
+else {
+    $expandedTargets = $Targets
+    do
+    {
+        $expandedTargets = $Targets
+        $Targets = $expandedTargets | ForEach-Object {
+            $target = $_
+            $directory = Join-Path $PSScriptRoot $target
+            if (-not (Test-Path -PathType Container -Path $directory)) {
+                Write-Error "Target directory not found: $directory"
+                return
+            }
+            $kluctlFile = Join-Path $directory ".kluctl.yml"
+            $seqFile = Join-Path $directory "deploy.seq"
+            if (Test-Path -PathType Leaf -Path $kluctlFile) {
+                return $_
+            } elseif (Test-Path -PathType Leaf -Path $seqFile) {
+                $seq = Get-Content -Path $seqFile
+                return $seq | Where-Object { $_ -notin $expandedTargets } |
+                    ForEach-Object { Join-Path $target $_ }
+            } else {
+                Write-Error "No .kluctl.yml or deploy.seq file found in: $directory"
+                return
+            }
+        }
+    } while ($Targets.Count -ine $expandedTargets.Count);
+    $expandedTargets = $Targets | ForEach-Object {
+        $directory = Join-Path $PSScriptRoot $_
+        if (-not (Test-Path -PathType Container -Path $directory)) {
+            Write-Error "Target directory not found: $directory"
+            return
+        }
+        $kluctlFile = Join-Path $directory ".kluctl.yml"
+        $seqFile = Join-Path $directory "deploy.seq"
+        if (Test-Path -PathType Leaf -Path $kluctlFile) {
+            return $_
+        } elseif (Test-Path -PathType Leaf -Path $seqFile) {
+            $seq = Get-Content -Path $seqFile
+
+            
+        } else {
+            Write-Error "No .kluctl.yml or deploy.seq file found in: $directory"
+            return
+        }
+
+    }
+
+    foreach ($target in $Targets) {
+        $targetPath = Join-Path $PSScriptRoot $target
+        if (-not (Test-Path -Path $targetPath)) {
+            Write-Error "Target directory not found: $targetPath"
+            return
+        }
+
+        Push-Location -Path $targetPath
+        if ($NoPrune) {
+            & kluctl deploy -t local
+        }
+        else {
+            & kluctl deploy -t local --prune
+        }
+        Pop-Location
+    }
+}

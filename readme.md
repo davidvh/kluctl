@@ -9,9 +9,9 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 3. Setup a k0s cluster. k3s also possible, if load balancer and traefik are disabled so that they can be managed by this config.
 4. Install Kluctl
 5. Create a new YAML file defining the arguments described in /bootstrap/.kluctl.yml
-6. `cd` into the bootstrap folder and execute `kluctl deploy -t local --args-from-file <YAML file>`
-7. `cd` into the clusterinfra folder and execute `kluctl deploy -t local`
-8. TODO: Install applications
+6. Execute `.\deploy.ps1 -BootstrapFile <YAML file>` to set the bootstrap values in the cluster
+7. Execute `.\deploy.ps1 -Targets base` to deploy the basic infrastructure
+8. Execute `.\deploy.ps1 -Targets apps` (or other sub-targets) to deploy applications
 
 ### TODO
 
@@ -38,8 +38,5 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 
 ### TODO
 
-- LLDAP bootstrap script can create users, but a single kluctl deployment cannot create a secret and then consume it in the next step, so the initial deployment requires a bit of hacking to slowly deploy via multiple commands. There are some options:
-  - Use external tooling to invoke the deployment multiple times (e.g. a Makefile)
-  - Use the [Template Controller](https://kluctl.io/docs/template-controller/) to avoid using secrets directly (although this may be difficult to cross namespaces).
-  - Define the secrets during bootstrap (but might not scale to other secrets)
+- Base initialization needs to be broken down more to support rollout from scratch. Currently tries to use secrets before they are created.
 - Should be possible to host a webmail frontend.
