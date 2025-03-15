@@ -1,6 +1,8 @@
-[CmdletBinding(DefaultParameterSetName = 'Deploy')]
+[CmdletBinding(DefaultParameterSetName = 'Deploy', SupportsShouldProcess = $true)]
 param (
     [switch] $NoPrune,
+
+    [switch] $SkipConfirmAfterDiff,
 
     [Parameter(ParameterSetName = 'Bootstrap')]
     [string] $BootstrapFile,
@@ -27,9 +29,14 @@ if ($PSCmdlet.ParameterSetName -ieq 'Bootstrap') {
         return
     }
 
-    Push-Location -Path (Join-Path $PSScriptRoot "bootstrap")
-    & kluctl deploy -t local --args-from-file $BootstrapFile
-    Pop-Location
+    $kluctlArgs = @("deploy", "-t", "local", "--args-from-file", "$BootstrapFile")
+    if (-not $NoPrune) {
+        $kluctlArgs += "--prune"
+    }
+    if ($SkipConfirmAfterDiff) {
+        $kluctlArgs += "--yes"
+    }
+    Start-Process -FilePath kluctl -NoNewWindow -Wait -ArgumentList $kluctlArgs -WorkingDirectory (Join-Path $PSScriptRoot "bootstrap")
 }
 else {
     $expandedTargets = $Targets
@@ -78,20 +85,23 @@ else {
 
     }
 
+    $kluctlArgs = @("deploy", "-t", "local")
+    if (-not $NoPrune) {
+        $kluctlArgs += "--prune"
+    }
+    if ($SkipConfirmAfterDiff) {
+        $kluctlArgs += "--yes"
+    }
+
+    
     foreach ($target in $Targets) {
+        Write-Host "Deploying target: $target"
         $targetPath = Join-Path $PSScriptRoot $target
         if (-not (Test-Path -Path $targetPath)) {
             Write-Error "Target directory not found: $targetPath"
             return
         }
 
-        Push-Location -Path $targetPath
-        if ($NoPrune) {
-            & kluctl deploy -t local
-        }
-        else {
-            & kluctl deploy -t local --prune
-        }
-        Pop-Location
+        Start-Process -FilePath kluctl -NoNewWindow -Wait -ArgumentList $kluctlArgs -WorkingDirectory $target
     }
 }

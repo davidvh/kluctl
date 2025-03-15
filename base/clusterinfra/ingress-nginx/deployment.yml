@@ -1,0 +1,10 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: helm
+    vars:
+      - clusterConfigMap:
+          name: lbconfig
+          namespace: homelab-config
+          key: vars
+        targetPath: lbconfig

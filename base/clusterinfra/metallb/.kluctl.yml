@@ -1,4 +1,5 @@
 targets:
   - name: local
     context: default
-discriminator: "kluctl-{{ target.name }}"
+
+discriminator: "infra-lb-{{ target.name }}"

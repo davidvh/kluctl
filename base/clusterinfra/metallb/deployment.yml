@@ -1,0 +1,17 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: helm
+  - barrier: true
+  - path: config # TODO: figure out webhook to wait until metallb is ready
+    vars:
+      - clusterConfigMap:
+          name: lbconfig
+          namespace: homelab-config
+          key: vars
+        targetPath: lbconfig
+
+conflictResolution:
+  - kind: CustomResourceDefinition
+    fieldPathRegex: ".*\\.caBundle.*"
+    action: ignore

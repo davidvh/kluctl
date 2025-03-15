@@ -1,0 +1,5 @@
+targets:
+  - name: local
+    context: default
+
+discriminator: "infra-storage-{{ target.name }}"

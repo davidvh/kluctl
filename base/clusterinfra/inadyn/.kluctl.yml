@@ -2,4 +2,4 @@ targets:
   - name: local
     context: default
 
-discriminator: "infra-{{ target.name }}"
+discriminator: "infra-ddns-{{ target.name }}"
