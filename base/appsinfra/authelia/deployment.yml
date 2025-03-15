@@ -1,0 +1,21 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: authelia
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress
+      - clusterConfigMap:
+          name: ldap
+          namespace: homelab-config
+          key: vars
+        targetPath: ldap
+      - clusterObject:
+          kind: Secret
+          name: lldap-admin
+          namespace: lldap
+          path: data
+        targetPath: lldap_user

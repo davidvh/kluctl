@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: authelia
+  namespace: authelia
+  labels:
+    app: authelia
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+spec:
+  tls:
+    - hosts:
+        - authelia.{{ ingress.domain }}
+      secretName: cert-authelia
+  rules:
+    - host: authelia.{{ ingress.domain }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: authelia
+                port:
+                  name: http

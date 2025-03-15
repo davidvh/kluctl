@@ -1,0 +1,92 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: authelia-config
+  namespace: authelia
+  labels:
+    app: authelia
+data:
+  configuration.yaml: |
+    theme: dark
+    server:
+      host: 0.0.0.0
+      port: 9091
+      path: ""
+    telemetry:
+      metrics:
+        enabled: false
+        address: tcp://0.0.0.0:9959
+    totp:
+      disable: false
+      issuer: authelia.{{ ingress.domain }}
+    webauthn:
+      disable: false
+      timeout: 60s
+    ntp:
+      address: time.cloudflare.com:123
+      max_desync: 3s
+
+    authentication_backend:
+      password_reset:
+        disable: false
+      ldap:
+        implementation: custom
+        url: ldap://lldap.lldap:389
+        timeout: 5s
+        start_tls: false
+        base_dn: {{ ldap.dn }}
+        username_attribute: uid
+        additional_users_dn: OU=people
+        # To allow sign in both with username and email, one can use a filter like
+        # (&(|({username_attribute}={input})({mail_attribute}={input}))(objectClass=person))
+        users_filter: (&({username_attribute}={input})(objectClass=person))
+        additional_groups_dn: OU=groups
+        groups_filter: (member={dn})
+        group_name_attribute: cn
+        mail_attribute: mail
+        display_name_attribute: displayName
+        # The username and password of the admin or service user.
+        user: UID={{ lldap_user.username | b64decode }},OU=people,{{ ldap.dn }}
+
+    password_policy:
+      standard:
+        enabled: false
+        min_length: 8
+        max_length: 0
+        require_uppercase: true
+        require_lowercase: true
+        require_number: true
+        require_special: true
+      zxcvbn:
+        enabled: false
+        min_score: 3
+
+    # TODO: Strengthen
+    access_control:
+      default_policy: one_factor
+
+    session:
+      name: authelia_session
+      domain: {{ ingress.domain }}
+      same_site: lax
+      expiration: 1h
+      inactivity: 5m
+      remember_me_duration: 1M
+
+    regulation:
+      max_retries: 3
+      find_time: 2m
+      ban_time: 5m
+
+    storage:
+      local:
+        path: /db.sqlite3
+    notifier:
+      disable_startup_check: false
+      smtp:
+        host: mailserver.mailserver
+        port: 25
+        sender: admin@mail.{{ ingress.domain }}
+        # Disable TLS since we're using an internal SMTP service
+        disable_require_tls: true
+        disable_starttls: true
