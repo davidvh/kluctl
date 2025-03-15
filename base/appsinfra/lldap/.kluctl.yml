@@ -1,0 +1,5 @@
+targets:
+  - name: local
+    context: default
+
+discriminator: "appsinfra-ldap-{{ target.name }}"

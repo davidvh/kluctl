@@ -1,178 +1,26 @@
----
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: mailserver
-  namespace: mailserver
-spec:
-  progressDeadlineSeconds: 600
-  replicas: 1
-  revisionHistoryLimit: 10
-  selector:
-    matchLabels:
-      app: mailserver
-  strategy:
-    type: Recreate
-  template:
-    metadata:
-      labels:
-        app: mailserver
-    spec:
-      containers:
-      - name: mailserver
-        image: ghcr.io/docker-mailserver/docker-mailserver:15.0.0
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 25
-          name: smtp
-          protocol: TCP
-        - containerPort: 465
-          name: submissions
-          protocol: TCP
-        - containerPort: 587
-          name: submission
-          protocol: TCP
-        - containerPort: 12525
-          name: smtp-proxy
-          protocol: TCP
-        - containerPort: 10465
-          name: subs-proxy
-          protocol: TCP
-        - containerPort: 10587
-          name: sub-proxy
-          protocol: TCP
-        - containerPort: 143
-          name: imap
-          protocol: TCP
-        - containerPort: 993
-          name: imaps
-          protocol: TCP
-        - containerPort: 10143
-          name: imap-proxy
-          protocol: TCP
-        - containerPort: 10993
-          name: imaps-proxy
-          protocol: TCP
-        - containerPort: 11334
-          name: rspamd
-          protocol: TCP
-        volumeMounts:
-        - name: mailserver-data
-          mountPath: /var/mail
-        - name: mailserver-state
-          mountPath: /var/mail-state
-        - name: mailserver-config
-          mountPath: /tmp/docker-mailserver/
-        - name: certificate
-          mountPath: /tmp/dms/custom-certs
-          readOnly: true
-        - name: postfix-spool
-          mountPath: /var/spool/postfix
-        resources:
-          limits:
-            cpu: "2"
-            ephemeral-storage: 500Mi
-            memory: 2Gi
-          requests:
-            cpu: "1"
-            ephemeral-storage: 100Mi
-            memory: 1536Mi
-        env:
-        - name: OVERRIDE_HOSTNAME
-          value: mail.{{ ingress.domain }}
-        - name: LOG_LEVEL
-          value: "debug"
-        - name: SUPERVISOR_LOGLEVEL
-          value: "debug"
-        - name: SPAMASSASSIN_SPAM_TO_INBOX
-          value: "1"
-        - name: ENABLE_FAIL2BAN
-          value: "0"
-        - name: ENABLE_AMAVIS
-          value: "0"
-        - name: SPOOF_PROTECTION
-          value: "1"
-        - name: ENABLE_OPENDKIM
-          value: "0"
-        - name: ENABLE_OPENDMARC
-          value: "0"
-        - name: ACCOUNT_PROVISIONER
-          value: "LDAP"
-        - name: LDAP_SERVER_HOST
-          value: "ldap://lldap.lldap"
-        - name: LDAP_SEARCH_BASE
-          value: "ou=people,{{ ldap.dn }}"
-        - name: LDAP_BIND_DN
-          value: "uid={{ lldap_user.username | b64decode }},ou=people,{{ ldap.dn }}"
-        - name: LDAP_BIND_PW
-          valueFrom:
-            secretKeyRef:
-              name: lldap-user
-              key: password
-        - name: LDAP_QUERY_FILTER_USER
-          value: "(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))"
-        - name: LDAP_QUERY_FILTER_GROUP
-          value: "(&(objectClass=groupOfUniqueNames)(uid=%s))"
-        - name: LDAP_QUERY_FILTER_ALIAS
-          value: "(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))"
-        - name: LDAP_QUERY_FILTER_DOMAIN
-          value: "(mail=*@%s)"
-        - name: DOVECOT_AUTH_BIND
-          value: "yes"
-        - name: DOVECOT_USER_FILTER
-          value: "(&(objectClass=inetOrgPerson)(|(uid=%u)(mail=%u)))"
-        - name: DOVECOT_USER_ATTRS
-          value: "=uid=5000,=gid=5000,=home=/var/mail/%Ln,=mail=maildir:~/Maildir"
-        - name: LOGROTATE_COUNT
-          value: "4"
-        - name: LOGROTATE_INTERVAL
-          value: weekly
-        - name: POSTMASTER_ADDRESS
-          value: "admin@mail.{{ ingress.domain }}"
-        - name: SSL_TYPE
-          value: manual
-        - name: SSL_CERT_PATH
-          value: /tmp/dms/custom-certs/tls.crt
-        - name: SSL_KEY_PATH
-          value: /tmp/dms/custom-certs/tls.key
-        livenessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - supervisorctl status | grep -E "amavis|clamav|cron|dovecot|mailserver|opendkim|opendmarc|postfix|rsyslog"
-              | grep RUNNING
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
-        readinessProbe:
-          exec:
-            command:
-            - /bin/bash
-            - -c
-            - supervisorctl status | grep -E "mailserver|postfix" | grep RUNNING
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
-      dnsPolicy: ClusterFirst
-      restartPolicy: Always
-      volumes:
-      - name: certificate
-        secret:
-          defaultMode: 420
-          secretName: mail-tls
-      - name: mailserver-data
-        persistentVolumeClaim:
-          claimName: mailserver-data
-      - name: mailserver-state
-        persistentVolumeClaim:
-          claimName: mailserver-state
-      - name: mailserver-config
-        persistentVolumeClaim:
-          claimName: mailserver-config
-      - name: postfix-spool
-        emptyDir: {}
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: mailserver
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress
+      - clusterConfigMap:
+          name: lbconfig
+          namespace: homelab-config
+          key: vars
+        targetPath: lbconfig
+      - clusterConfigMap:
+          name: ldap
+          namespace: homelab-config
+          key: vars
+        targetPath: ldap
+      - clusterObject:
+          kind: Secret
+          name: lldap-reader
+          namespace: lldap
+          path: data
+        targetPath: lldap_user

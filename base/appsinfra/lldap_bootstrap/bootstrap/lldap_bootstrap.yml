@@ -24,7 +24,7 @@ stringData:
   ldap_reader.json: |
     {
       "id": "{{ lldap_reader.username | b64decode }}",
-      "email": "{{ lldap_reader.username | b64decode }}@{{ ingress.domain }}",
+      "email": "{{ lldap_reader.username | b64decode }}@mail.{{ ingress.domain }}",
       "password": "{{ lldap_reader.password | b64decode }}",
       "displayName": "LLDAP Reader",
       "groups": [

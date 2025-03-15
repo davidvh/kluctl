@@ -1,0 +1,20 @@
+deployments:
+  - path: bootstrap
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress
+      - clusterObject:
+          kind: Secret
+          name: lldap-admin
+          namespace: lldap
+          path: data
+        targetPath: lldap_admin
+      - clusterObject:
+          kind: Secret
+          name: lldap-reader
+          namespace: lldap
+          path: data
+        targetPath: lldap_reader

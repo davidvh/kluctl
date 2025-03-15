@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: lldap-admin
+  namespace: lldap
+  labels:
+    app: lldap
+  annotations:
+    secret-generator.v1.mittwald.de/length: "20"
+    secret-generator.v1.mittwald.de/autogenerate: password
+stringData:
+  username: admin
