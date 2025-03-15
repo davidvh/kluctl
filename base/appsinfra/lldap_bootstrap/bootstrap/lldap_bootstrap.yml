@@ -41,6 +41,7 @@ metadata:
   annotations: 
     klcltl.io/hook: "post-deploy"
 spec:
+  ttlSecondsAfterFinished: 30
   template:
     spec:
       restartPolicy: OnFailure
