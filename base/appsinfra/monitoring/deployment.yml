@@ -20,6 +20,7 @@ deployments:
           namespace: lldap
           path: data
         targetPath: lldap_user
+  - path: grafana-dashboards
 
 ignoreForDiff:
   - fieldPath: metadata.annotations["prometheus-operator-validated"]

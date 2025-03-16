@@ -52,3 +52,10 @@
                 items:
                 - key: datasources.yaml
                   path: provisioning/datasources/datasources.yaml
+            - configMap:
+                name: grafana-dashboards
+                items:
+                - key: dashboards.yml
+                  path: provisioning/dashboards/dashboards.yml
+                - key: node-exporter-full.json
+                  path: provisioning/dashboards/node-exporter-full.json

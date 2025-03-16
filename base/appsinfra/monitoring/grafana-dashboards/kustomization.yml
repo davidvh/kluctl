@@ -1,0 +1,8 @@
+namespace: monitoring
+configMapGenerator:
+- name: grafana-dashboards
+  options:
+    disableNameSuffixHash: true
+  files:
+  - dashboards.yml
+  - https://github.com/rfmoz/grafana-dashboards/raw/refs/heads/master/prometheus/node-exporter-full.json
