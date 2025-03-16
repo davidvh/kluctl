@@ -25,18 +25,43 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 
 ## Structure
 
-- /bootstrat   
+- /bootstrap   
   Creates ConfigMaps and Secrets in the `homelab-config` namespace. Kluctl can refer to these configurations to deploy other resources. This is as an alternative to storing configs and secrets in the code repo directly (e.g. SOPs, etc).
-- /clusterinfra   
-  This defines steps to set up the minimal cluster, including load balancing, ingress, certificates, etc.
+- /base/clusterinfra   
+  This defines services for the minimal cluster, including load balancing, ingress, certificates, etc.
+- /base/appsinfra  
+  This defines services that support other applications. This includes user authentication, monitoring, and notifications.
+- /apps  
+  The applications. Most users will spend time interacting with these services.
 
 ## Base Services
 
 - `homepage.<domain>` - Automatically includes browser pages for your services, plus some basic monitoring of the cluster
 - `lldap.<domain>` - LDAP accounts. The admin account is randomly generated in the lldap-admin secret. Use this account to do the initial login and create user accounts to authenticate with other services.
-- `mail.<domain>` - a local-only email server for `<username>@mail.<domain>`. Services will use this to send notifications. Computers/phones can be configured to connect to this endpoint for SMTP and IMAP.
+- `mail.<domain>` - a local-only email server for `<username>@mail.<domain>`. Services will use this to send notifications. Computers/phones can be configured to connect to this endpoint via SMTP and IMAP to recieve the notifications.
+- `grafana.<domain>` - Monitoring of the cluster and applications.
 
 ### TODO
 
-- Base initialization needs to be broken down more to support rollout from scratch. Currently tries to use secrets before they are created.
 - Should be possible to host a webmail frontend.
+- Expose logs in grafana (Loki)
+- Blocky install for automatic routing and ad blocking
+- WireGuard install for automatic VPN support
+- Apps:
+  - Recipes: [Mealie](https://github.com/mealie-recipes/mealie/)
+  - Personal CRM: [Monica](https://www.monicahq.com/)
+  - Tasks: [Vikunja](https://vikunja.io/)
+  - Notes: [Memos](https://www.usememos.com/)
+  - Books: [AudioBookshelf](https://www.audiobookshelf.org/guides)
+  - Comics/PDFs: [Kavita](https://www.kavitareader.com/)
+  - Document archive: [Paperless-NGX](https://docs.paperless-ngx.com/)
+  - Home inventory [HomeBox?](https://homebox.software/en/)
+  - Photo archive: [Immich](https://immich.app/docs/overview/introduction)
+  - File management: [FileBrowser](https://filebrowser.org/installation)
+  - Videos [Jellyfin](https://jellyfin.org/) + [Samba](https://github.com/kubernetes-csi/csi-driver-smb?tab=readme-ov-file)
+  - Archive DVDs [Handbrake](https://github.com/TheNickOfTime/handbrake-web)
+  - Read later: [LinkWarden](https://docs.linkwarden.app/self-hosting/installation)
+  - Home automation: [Home Assistant](https://www.home-assistant.io/)
+  - AI (Ollama?)
+- Add a bigger storage pool for media storage
+- Define regular backups
