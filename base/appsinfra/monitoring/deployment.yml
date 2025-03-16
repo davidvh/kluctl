@@ -1,0 +1,25 @@
+deployments:
+  - path: namespace
+  - barrier: true
+  - path: prometheus-stack
+  - path: grafana
+    vars:
+      - clusterConfigMap:
+          name: ingress
+          namespace: homelab-config
+          key: vars
+        targetPath: ingress
+      - clusterConfigMap:
+          name: ldap
+          namespace: homelab-config
+          key: vars
+        targetPath: ldap
+      - clusterObject:
+          kind: Secret
+          name: lldap-reader
+          namespace: lldap
+          path: data
+        targetPath: lldap_user
+
+ignoreForDiff:
+  - fieldPath: metadata.annotations["prometheus-operator-validated"]

@@ -2,3 +2,4 @@ lldap
 lldap_bootstrap
 mailserver
 authelia
+monitoring

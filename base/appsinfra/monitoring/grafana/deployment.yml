@@ -1,0 +1,54 @@
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: grafana
+    namespace: monitoring
+    labels:
+      app: grafana
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: grafana
+    template:
+      metadata:
+        labels:
+          app: grafana
+      spec:
+        containers:
+        - name: grafana
+          image: grafana/grafana:11.5.2
+          ports:
+          - containerPort: 3000
+            name: web
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "500m"
+            requests:
+              memory: "256Mi"
+              cpu: "250m"
+          env:
+          - name: GF_SECURITY_ADMIN_USER
+            value: "admin"
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: "grafana"
+          volumeMounts:
+          - name: config
+            mountPath: /etc/grafana
+        volumes:
+        - name: config
+          projected:
+            sources:
+            - secret:
+                name: grafana-config
+                items:
+                - key: ldap.toml
+                  path: ldap.toml
+                - key: grafana.ini
+                  path: grafana.ini
+            - configMap:
+                name: grafana-datasources
+                items:
+                - key: datasources.yaml
+                  path: provisioning/datasources/datasources.yaml

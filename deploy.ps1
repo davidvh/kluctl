@@ -102,6 +102,6 @@ else {
             return
         }
 
-        Start-Process -FilePath kluctl -NoNewWindow -Wait -ArgumentList $kluctlArgs -WorkingDirectory $target
+        Start-Process -FilePath kluctl -NoNewWindow -Wait -ArgumentList $kluctlArgs -WorkingDirectory $targetPath
     }
 }
