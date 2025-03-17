@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Secret
+type: Opaque
+metadata:
+  name: ldap-user
+  labels:
+    io.kompose.service: mealie
+data:
+  username: {{ lldap_user.username }}
+  password: {{ lldap_user.password }}

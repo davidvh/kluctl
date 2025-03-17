@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mealie
+  labels:
+    io.kompose.service: mealie
+  annotations:
+    cert-manager.io/cluster-issuer: cloudflare-issuer
+    gethomepage.dev/description: Recipe manager
+    gethomepage.dev/enabled: "true"
+    gethomepage.dev/group: Home
+    gethomepage.dev/icon: mealie.png
+    gethomepage.dev/name: Mealie
+spec:
+  tls:
+    - hosts:
+        - "mealie.{{ ingress.domain }}"
+      secretName: cert-tls
+  rules:
+    - host: "mealie.{{ ingress.domain }}"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: mealie
+                port:
+                  number: 80

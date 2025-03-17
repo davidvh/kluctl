@@ -11,6 +11,10 @@ data:
     {
       "name" : "media"
     }
+  home.json: |
+    {
+      "name" : "home"
+    }
 ---
 apiVersion: v1
 kind: Secret
@@ -95,4 +99,6 @@ spec:
                   items:
                     - key: media.json
                       path: media.json
+                    - key: home.json
+                      path: home.json
               

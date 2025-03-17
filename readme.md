@@ -22,6 +22,7 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 - [k9s](https://k9scli.io/) provides a CLI tool to monitor and manage kubernetes
   - `:secrets` will switch to view secrets. `:pods` views pods.
   - Edit secrets (e.g. to manage manual secrets for email auth, certificate generation, etc.)
+- [kompose](https://kompose.io/) to quickly convert docker compose files to kubernetes
 
 ## Structure
 
