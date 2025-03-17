@@ -1,4 +1,4 @@
-# Flux Cluster
+# Kluctl Cluster
 
 Manages a cluster using [Kluctl](https://kluctl.io/). 
 
@@ -16,6 +16,15 @@ Manages a cluster using [Kluctl](https://kluctl.io/).
 ### TODO
 
 - kluctl supports gitops, but this is not yet enabled
+
+## After install
+
+- Connect to `https://homepage.<domain>` to see the list of services
+- Open **LLDAP** to configure users.
+  - Use the ldap-admin secret to find the admin user to add the first user.
+  - Add users to the various groups to grant permission to the associated services.
+  - Recommend adding another user account to the admin group rather than using the initial admin account.
+- Open **Mealie** to do the initial configuration. After logging in with one of the LDAP accounts, skip the configuration.
 
 ## Useful commands/tools
 
